@@ -1,0 +1,60 @@
+_schema-version: "3.2"
+ID: gveIoTControl
+version: 0.0.1
+modules:
+- name: gveiotcontrol-approuter
+  type: approuter.nodejs
+  path: gveiotcontrol-approuter
+  requires:
+  - name: gveIoTControl_html_repo_runtime
+  - name: IOTAS_CONTROLS
+    group: destinations
+    properties:
+      strictSSL: false
+      forwardAuthToken: false
+      name: IOTAS_CONTROLS
+      url: '~{url}'  
+  parameters:
+    disk-quota: 256M
+    memory: 256M
+- name: gveIoTControl_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: gveIoTControl_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - Map-content.zip
+      name: Map
+      target-path: resources/
+- name: Map
+  type: html5
+  path: Map
+  build-parameters:
+    builder: custom
+    commands:
+    - npm run build
+    supported-platforms: []
+resources:
+- name: gveIoTControl_html_repo_runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: gveIoTControl_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: IOTAS_CONTROLS
+  properties:
+    url: 'https://sapuiiot-stakeholder.cfapps.sap.hana.ondemand.com'
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm install

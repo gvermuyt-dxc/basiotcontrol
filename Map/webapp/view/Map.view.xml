@@ -1,0 +1,13 @@
+<mvc:View controllerName="gve.iot.Map.controller.Map" xmlns:iot="sap.ui.iot.controls" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="{i18n>title}">
+					<content>
+                    <iot:IoTMap id="tmap0"></iot:IoTMap>
+                    </content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>
